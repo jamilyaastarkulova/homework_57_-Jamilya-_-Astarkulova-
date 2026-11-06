@@ -1,13 +1,21 @@
 from django import forms
 from django.forms import widgets
+from importlib.metadata import requires
+from  webapp.models import Todo, Status, Type
 
 
-class TodoForm(forms.Form):
-    task = forms.CharField(max_length=5000, widget=widgets.Textarea, required=True, label='Задание')
-    STATUS_CHOICES = [
-        ('new', 'Новая'),
-        ('in_progress', 'В процессе'),
-        ('done', 'Сделано')
-    ]
-    status = forms.ChoiceField(choices=STATUS_CHOICES, label='Статус')
-    deadline = forms.DateField(required=False, label="Дата выполнения")
+
+class TodoForm(forms.ModelForm):
+    class Meta:
+        model = Todo
+        fields = ['summary', 'description', 'status', 'type']
+
+class StatusForm(forms.ModelForm):
+    class Meta:
+        model = Status
+        fields = ['name']
+
+class TypeForm(forms.ModelForm):
+    class Meta:
+        model = Type
+        fields = ['name']
