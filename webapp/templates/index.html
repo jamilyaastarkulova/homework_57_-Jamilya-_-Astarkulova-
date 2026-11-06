@@ -9,7 +9,7 @@
             <div class="col mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">{{ todo.task }}</h4>
+                        <h4 class="card-title">{{ todo.'summary' }}</h4>
                         <div>
                             <a href="{% url 'todo_view' todo.pk %}" class="btn-solid theme-primary">Подробнее</a>
                             <a role="button"

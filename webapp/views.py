@@ -5,11 +5,18 @@ from webapp.forms import TodoForm
 from  webapp.models import Todo
 from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
 
-def index_view(request):
-    context = {
-        'todos': Todo.objects.all()
-    }
-    return render(request, 'index.html', context)
+from django.views.generic import TemplateView
+
+
+
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['todos'] = Todo.objects.all()
+        return context
+
 
 def todo_view(request, pk):
     # try:
