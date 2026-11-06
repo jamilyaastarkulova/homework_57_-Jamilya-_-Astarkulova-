@@ -54,7 +54,7 @@ class TodoCreateView(TemplateView):
 
 
 class TodoUpdateView(TemplateView):
-    template_name = 'todo_update.html'
+    template_name = 'update_todo.html'
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
@@ -75,7 +75,7 @@ class TodoUpdateView(TemplateView):
 
             todo.save()
             todo.type.set(types)
-            return redirect('todo_detail', pk=todo.pk)
+            return redirect('todo_list')
 
         return self.render_to_response({'form': form, 'todo': todo})
 

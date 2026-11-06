@@ -12,6 +12,7 @@ class TodoForm(forms.ModelForm):
     type = forms.ModelMultipleChoiceField(
         queryset=Type.objects.all(),
         required=True,
+
         label='Тип'
     )
 
