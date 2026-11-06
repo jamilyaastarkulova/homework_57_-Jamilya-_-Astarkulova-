@@ -14,7 +14,9 @@
         <div class="card-body">
             <p class="card-text fg-1">summary: {{ todo.summary }}</p>
             <p>status: {{ todo.status }}</p>
-            <p>type: {{ todo.type }}</p>
+            <p>types: {% for t in todo.type.all %}
+                {{ t.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}</p>
             <p>description: {{ todo.description }}</p>
             <div>
                             <a role="button" href="{% url 'todo_update' todo.pk %}"

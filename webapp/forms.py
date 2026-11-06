@@ -9,7 +9,7 @@ class TodoForm(forms.ModelForm):
         required=True,
         label='Статус'
     )
-    type = forms.ModelChoiceField(
+    type = forms.ModelMultipleChoiceField(
         queryset=Type.objects.all(),
         required=True,
         label='Тип'

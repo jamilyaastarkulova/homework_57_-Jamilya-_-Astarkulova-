@@ -13,6 +13,6 @@ class TypeAdmin(admin.ModelAdmin):
 
 @admin.register(Todo)
 class TodoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'summary', 'status', 'type', 'created_at')
-    list_filter = ('status', 'type')
-    search_fields = ('summary', 'description')
+    list_display = ['id', 'summary', 'status', 'created_at']
+    search_fields = ['summary', 'description']
+    list_filter = ['status', 'type']

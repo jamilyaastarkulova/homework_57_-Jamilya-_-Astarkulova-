@@ -39,12 +39,13 @@ class TodoCreateView(TemplateView):
     def post(self, request, *args, **kwargs):
         form = TodoForm(request.POST)
         if form.is_valid():
+            types = form.cleaned_data.pop('type')
             todo = Todo.objects.create(
                 summary=form.cleaned_data['summary'],
                 description=form.cleaned_data['description'],
-                status=form.cleaned_data['status'],
-                type=form.cleaned_data['type']
+                status=form.cleaned_data['status']
             )
+            todo.type.set(types)
             return redirect('todo_view', pk=todo.pk)
 
         context = self.get_context_data(**kwargs)
@@ -58,7 +59,7 @@ class TodoUpdateView(TemplateView):
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         todo = get_object_or_404(Todo, pk=pk)
-        form = TodoForm(initial={'summary': todo.summary, 'description': todo.description, 'status': todo.status, 'type': todo.type})
+        form = TodoForm(initial={'summary': todo.summary, 'description': todo.description, 'status': todo.status, 'type': todo.type.all()})
         return self.render_to_response({'form': form, 'todo': todo})
 
     def post(self, request, *args, **kwargs):
@@ -67,11 +68,13 @@ class TodoUpdateView(TemplateView):
         form = TodoForm(data=request.POST)
 
         if form.is_valid():
+            types = form.cleaned_data.pop('type')
             todo.summary = form.cleaned_data['summary']
             todo.description = form.cleaned_data['description']
             todo.status = form.cleaned_data['status']
-            todo.type = form.cleaned_data['type']
+
             todo.save()
+            todo.type.set(types)
             return redirect('todo_detail', pk=todo.pk)
 
         return self.render_to_response({'form': form, 'todo': todo})
