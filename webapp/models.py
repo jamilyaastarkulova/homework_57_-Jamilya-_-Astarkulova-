@@ -1,15 +1,37 @@
 from django.db import models
 
 
-class Todo(models.Model):
-    STATUS_CHOICES = [
-        ('new', 'Новая'),
-        ('in_progress', 'В процессе'),
-        ('done', 'Сделано')
-    ]
-    status = models.CharField(choices=STATUS_CHOICES, null=False, blank=False, verbose_name='Статус')
-    task = models.TextField(max_length=5000, null=False, blank=False, verbose_name="задача")
-    deadline = models.DateField(null=True, blank=True, verbose_name="Дата выполнения")
+class Status(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Название')
 
     def __str__(self):
-        return f'{self.pk} - {self.task}'
+        return self.name
+
+
+class Type(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Название')
+
+    def __str__(self):
+        return self.name
+
+
+class Todo(models.Model):
+    summary = models.CharField(max_length=200, verbose_name='Краткое описание')
+    description = models.TextField(null=True, blank=True, verbose_name='Полное описание')
+    status = models.ForeignKey(
+        'webapp.Status',
+        on_delete=models.PROTECT,
+        related_name='todos',
+        verbose_name='Статус'
+    )
+    type = models.ForeignKey(
+        'webapp.Type',
+        on_delete=models.PROTECT,
+        related_name='todos',
+        verbose_name='Тип'
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Время обновления')
+
+    def __str__(self):
+        return f"{self.id}. {self.summary}"

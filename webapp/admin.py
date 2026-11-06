@@ -1,16 +1,18 @@
 from django.contrib import admin
-from webapp.models import Todo
+from webapp.models import Todo, Status, Type
 
-#admin.site.register(Todo)
+@admin.register(Status)
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
 
-# class ArticleAdmin(admin.ModelAdmin):
-#     pass
-#
-# admin.site.register(Article, ArticleAdmin)
+
+@admin.register(Type)
+class TypeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
 
 @admin.register(Todo)
 class TodoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'task')
-    fields = ('task', 'status', 'deadline')
-    # exclude = []
-    readonly_fields = ('id',)
+    list_display = ('id', 'summary', 'status', 'type', 'created_at')
+    list_filter = ('status', 'type')
+    search_fields = ('summary', 'description')
