@@ -18,15 +18,14 @@ class IndexView(TemplateView):
         return context
 
 
-def todo_view(request, pk):
-    # try:
-    #     article = Article.objects.get(pk=pk)
-    # except Article.DoesNotExist:
-    #     # return HttpResponseNotFound('Article not found')
-    #     raise Http404('Article not found')
-    todo = get_object_or_404(Todo, pk=pk)
-    return render(request, 'todo_view.html', {'todo': todo})
+class TodoView(TemplateView):
+    template_name = 'todo_view.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = kwargs.get('pk')
+        context['todo'] = Todo.objects.get(pk=pk)
+        return context
 
 
 def todo_create_view(request):
