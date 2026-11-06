@@ -12,6 +12,8 @@
                         <h4 class="card-title">{{ todo.'summary' }}</h4>
                         <div>
                             <a href="{% url 'todo_view' todo.pk %}" class="btn-solid theme-primary">Подробнее</a>
+                            <a role="button" href="{% url 'todo_update' todo.pk %}"
+                               class="btn-solid theme-success">Обновить</a>
                             <a role="button"
                                href="{% url 'todo_delete' todo.pk %}"
                                class="btn-solid theme-danger">Удалить</a>

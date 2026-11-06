@@ -17,10 +17,12 @@
             <p>type: {{ todo.type }}</p>
             <p>description: {{ todo.description }}</p>
             <div>
-                <a role="button"
-                   href="{% url 'todo_delete' todo.pk %}"
-                   class="btn-solid theme-danger">Удалить</a>
-            </div>
+                            <a role="button" href="{% url 'todo_update' todo.pk %}"
+                               class="btn-solid theme-success">Обновить</a>
+                            <a role="button"
+                               href="{% url 'todo_delete' todo.pk %}"
+                               class="btn-solid theme-danger">Удалить</a>
+                        </div>
         </div>
     </div>
 {% endblock %}

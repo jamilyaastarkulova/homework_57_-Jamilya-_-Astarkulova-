@@ -51,10 +51,42 @@ class TodoCreateView(TemplateView):
         context['form'] = form
         return self.render_to_response(context)
 
-def todo_delete_view(request, pk):
-    todo = get_object_or_404(Todo, pk=pk)
-    if request.method == "GET":
-        return render(request, 'delete_todo.html', {'todo': todo})
-    elif request.method == "POST":
+
+class TodoUpdateView(TemplateView):
+    template_name = 'todo_update.html'
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        todo = get_object_or_404(Todo, pk=pk)
+        form = TodoForm(initial={'summary': todo.summary, 'description': todo.description, 'status': todo.status, 'type': todo.type})
+        return self.render_to_response({'form': form, 'todo': todo})
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        todo = get_object_or_404(Todo, pk=pk)
+        form = TodoForm(data=request.POST)
+
+        if form.is_valid():
+            todo.summary = form.cleaned_data['summary']
+            todo.description = form.cleaned_data['description']
+            todo.status = form.cleaned_data['status']
+            todo.type = form.cleaned_data['type']
+            todo.save()
+            return redirect('todo_detail', pk=todo.pk)
+
+        return self.render_to_response({'form': form, 'todo': todo})
+
+
+class TodoDeleteView(TemplateView):
+    template_name = 'delete_todo.html'
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        todo = get_object_or_404(Todo, pk=pk)
+        return self.render_to_response({'todo': todo})
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        todo = get_object_or_404(Todo, pk=pk)
         todo.delete()
         return redirect('todo_list')
