@@ -28,22 +28,28 @@ class TodoView(TemplateView):
         return context
 
 
-def todo_create_view(request):
+class TodoCreateView(TemplateView):
+    template_name = 'create_todo.html'
 
-    if request.method == 'GET':
-        form = TodoForm()
-        return render(request, 'create_todo.html', {'form': form})
-    elif request.method == 'POST':
-        form = TodoForm(data= request.POST)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = TodoForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = TodoForm(request.POST)
         if form.is_valid():
-            task = form.cleaned_data.get('task')
-            deadline = form.cleaned_data.get('deadline')
-            status = form.cleaned_data.get('status')
-            todo = Todo.objects.create(task=task, deadline=deadline, status=status)
+            todo = Todo.objects.create(
+                summary=form.cleaned_data['summary'],
+                description=form.cleaned_data['description'],
+                status=form.cleaned_data['status'],
+                type=form.cleaned_data['type']
+            )
             return redirect('todo_view', pk=todo.pk)
-        else:
-            return render(request, 'create_todo.html', {'form': form})
 
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
 
 def todo_delete_view(request, pk):
     todo = get_object_or_404(Todo, pk=pk)
